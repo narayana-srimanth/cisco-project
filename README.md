@@ -22,5 +22,5 @@ DREP is a **Smart Disaster Resource Exchange Platform** that enables verified di
 
 ## Project Structure
 
-- [`frontend/`](./frontend/) — React application (Vite + TypeScript + Tailwind CSS)
+- [`frontend/`](./frontend/) — Demo application using React
 - [`docs/`](./docs/) — Architecture diagrams and documentation
