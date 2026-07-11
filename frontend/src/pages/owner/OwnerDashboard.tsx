@@ -37,7 +37,6 @@ export default function OwnerDashboard() {
   const available = resources.filter((r) => r.available).length;
   const totalRequests = requests.length;
   const pendingRequests = requests.filter((r) => r.status === 'pending').length;
-  const fulfilledRequests = requests.filter((r) => r.status === 'fulfilled').length;
 
   const stats = [
     { label: 'Published Resources', value: totalResources, icon: <Package size={20} />, color: 'text-[#0D9488]', bg: 'bg-[#CCFBF1]' },

@@ -9,7 +9,7 @@ import {
   Table, TableHeader, TableBody, TableHead, TableRow, TableCell,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { FilePlus, Search, Clock, CheckCircle2, Loader2, CheckCircle, ArrowRight } from 'lucide-react';
+import { FilePlus, Search, Clock, Loader2, CheckCircle, ArrowRight } from 'lucide-react';
 
 export default function POCDashboard() {
   const navigate = useNavigate();
@@ -28,7 +28,6 @@ export default function POCDashboard() {
 
   const total = requests.length;
   const pending = requests.filter((r) => r.status === 'pending').length;
-  const approved = requests.filter((r) => r.status === 'approved').length;
   const inProgress = requests.filter((r) => r.status === 'in_progress').length;
   const fulfilled = requests.filter((r) => r.status === 'fulfilled').length;
 

@@ -8,7 +8,7 @@ import {
   Table, TableHeader, TableBody, TableHead, TableRow, TableCell,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { Building2, Package, FileText, CheckCircle2, Clock, ArrowRight } from 'lucide-react';
+import { Building2, Package, FileText, Clock, ArrowRight } from 'lucide-react';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -34,7 +34,6 @@ export default function AdminDashboard() {
   const totalResources = resources.length;
   const totalRequests = requests.length;
   const pendingRequests = requests.filter((r) => r.status === 'pending').length;
-  const fulfilledRequests = requests.filter((r) => r.status === 'fulfilled').length;
 
   const stats = [
     { label: 'Total Agencies', value: totalAgencies, icon: <Building2 size={20} />, color: 'text-[#475569]', bg: 'bg-[#F1F5F9]' },
