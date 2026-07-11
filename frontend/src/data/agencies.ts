@@ -1,0 +1,58 @@
+import type { Agency } from '@/types';
+
+export const mockAgencies: Agency[] = [
+  {
+    id: 'a1',
+    name: 'City Central Hospital',
+    type: 'hospital',
+    contactPerson: 'Dr. Sunita Sharma',
+    phone: '+91-9876543210',
+    email: 'sunita@cityhospital.org',
+    address: 'MG Road, Pune 411001',
+  },
+  {
+    id: 'a2',
+    name: 'Pune City Police - Station 5',
+    type: 'police',
+    contactPerson: 'Inspector Rajesh Kumar',
+    phone: '+91-9876543211',
+    email: 'rajesh@punepolice.gov.in',
+    address: 'FC Road, Pune 411004',
+  },
+  {
+    id: 'a3',
+    name: 'Red Cross Relief Society',
+    type: 'ngo',
+    contactPerson: 'Amit Patel',
+    phone: '+91-9876543212',
+    email: 'amit@redcrossrelief.org',
+    address: 'Shivaji Nagar, Pune 411005',
+  },
+  {
+    id: 'a4',
+    name: 'Pune Fire Station - Unit 3',
+    type: 'fire',
+    contactPerson: 'Captain Deepak Verma',
+    phone: '+91-9876543213',
+    email: 'deepak@punefire.gov.in',
+    address: 'Kothrud, Pune 411038',
+  },
+  {
+    id: 'a5',
+    name: 'Seva Bharti Volunteer Group',
+    type: 'volunteer',
+    contactPerson: 'Priya Deshmukh',
+    phone: '+91-9876543214',
+    email: 'priya@sevabharti.org',
+    address: 'Hadapsar, Pune 411028',
+  },
+  {
+    id: 'a6',
+    name: 'District Disaster Management Authority',
+    type: 'government',
+    contactPerson: 'Suresh Jadhav',
+    phone: '+91-9876543215',
+    email: 'suresh@ddma.gov.in',
+    address: 'Collectorate, Pune 411001',
+  },
+];
