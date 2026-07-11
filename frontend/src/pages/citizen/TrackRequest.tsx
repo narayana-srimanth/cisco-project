@@ -109,6 +109,7 @@ export default function TrackRequest() {
 
           <div className="w-full max-w-md rounded-xl border border-[#E2E8F0] bg-white p-5 shadow-sm">
             <p className="text-xs font-semibold text-[#0F172A] mb-3">Try these sample tracking IDs:</p>
+            <p className="text-[11px] text-[#94A3B8] mb-3 italic">For demo purposes only — these are pre-filled sample requests.</p>
             <div className="space-y-2">
               {[
                 { id: 'TRK-2026-001', name: 'Meena Kumari', desc: 'Oxygen supply', status: 'approved' },
