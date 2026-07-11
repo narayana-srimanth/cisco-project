@@ -33,6 +33,4 @@ yarn-error.log*
 coverage/
 
 # Misc
-.opencode/plans/
 *.tsbuildinfo
-HANDOFF.md
