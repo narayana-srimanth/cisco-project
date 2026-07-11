@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import type { UserRole } from '@/types';
-import { Shield, Building2, HeartHandshake, ArrowRight, MapPin } from 'lucide-react';
+import { Shield, Building2, HeartHandshake, ArrowRight, ArrowLeft, MapPin, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const roles: { role: UserRole; label: string; description: string; icon: React.ReactNode; roleColor: string; hoverBorder: string }[] = [
@@ -32,27 +32,47 @@ const roles: { role: UserRole; label: string; description: string; icon: React.R
   },
 ];
 
-const roleDemoUser: Record<UserRole, string> = {
-  admin: 'Suresh Jadhav — DDMA',
-  poc: 'Dr. Sunita Sharma — City Hospital',
-  owner: 'Amit Patel — Red Cross Relief',
+const demoCredentials: Record<UserRole, { email: string; password: string; name: string }> = {
+  admin: { email: 'admin@ddma.gov.in', password: 'demo', name: 'Suresh Jadhav' },
+  poc: { email: 'sunita@cityhospital.org', password: 'demo', name: 'Dr. Sunita Sharma' },
+  owner: { email: 'amit@redcrossrelief.org', password: 'demo', name: 'Amit Patel' },
 };
 
 export default function Login() {
   const { login, isLoading } = useAuth();
   const navigate = useNavigate();
-  const [selected, setSelected] = useState<UserRole | null>(null);
+  const [step, setStep] = useState<'role' | 'login'>('role');
+  const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleLogin = async (role: UserRole) => {
-    setSelected(role);
-    await login(role);
+  const handleRoleSelect = (role: UserRole) => {
+    setSelectedRole(role);
+    setEmail(demoCredentials[role].email);
+    setPassword(demoCredentials[role].password);
+    setStep('login');
+  };
+
+  const handleBack = () => {
+    setStep('role');
+    setSelectedRole(null);
+    setEmail('');
+    setPassword('');
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedRole) return;
+    await login(selectedRole);
     const routes: Record<UserRole, string> = {
       admin: '/admin/dashboard',
       poc: '/poc/dashboard',
       owner: '/owner/dashboard',
     };
-    navigate(routes[role]);
+    navigate(routes[selectedRole]);
   };
+
+  const selectedConfig = selectedRole ? roles.find((r) => r.role === selectedRole) : null;
 
   return (
     <div className="flex min-h-screen bg-white">
@@ -98,54 +118,124 @@ export default function Login() {
             </div>
           </div>
 
-          <h2 className="text-2xl font-bold text-[#0F172A] mb-1">Welcome back</h2>
-          <p className="text-sm text-[#64748B] mb-8">Select your role to access the platform (demo mode)</p>
+          {step === 'role' ? (
+            <>
+              <h2 className="text-2xl font-bold text-[#0F172A] mb-1">Welcome back</h2>
+              <p className="text-sm text-[#64748B] mb-8">Select your role to access the platform</p>
 
-          {/* Role cards */}
-          <div className="space-y-3">
-            {roles.map((r) => (
-              <button
-                key={r.role}
-                onClick={() => handleLogin(r.role)}
-                disabled={isLoading && selected === r.role}
-                className={cn(
-                  'group w-full rounded-xl border border-[#E2E8F0] bg-white p-5 text-left transition-all shadow-sm',
-                  r.hoverBorder,
-                  'hover:shadow-md',
-                  selected === r.role ? 'border-[#1E40AF] ring-1 ring-[#1E40AF]/20 bg-[#DBEAFE]/30' : '',
-                )}
-              >
-                <div className="flex items-center gap-4">
-                  <div className={cn('flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-white', r.roleColor)}>
-                    {r.icon}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm font-semibold text-[#0F172A]">{r.label}</p>
-                      {selected === r.role && isLoading && (
-                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#1E40AF] border-t-transparent" />
-                      )}
+              {/* Role cards */}
+              <div className="space-y-3">
+                {roles.map((r) => (
+                  <button
+                    key={r.role}
+                    onClick={() => handleRoleSelect(r.role)}
+                    className={cn(
+                      'group w-full rounded-xl border border-[#E2E8F0] bg-white p-5 text-left transition-all shadow-sm',
+                      r.hoverBorder,
+                      'hover:shadow-md',
+                    )}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={cn('flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-white', r.roleColor)}>
+                        {r.icon}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-[#0F172A]">{r.label}</p>
+                        <p className="text-xs text-[#64748B] mt-0.5 leading-relaxed">{r.description}</p>
+                      </div>
+                      <ArrowRight size={16} className="shrink-0 text-[#94A3B8] group-hover:text-[#1E40AF] transition-colors" />
                     </div>
-                    <p className="text-xs text-[#64748B] mt-0.5 leading-relaxed">{r.description}</p>
-                    <p className="text-[11px] text-[#94A3B8] mt-1.5">
-                      Demo: {roleDemoUser[r.role]}
-                    </p>
-                  </div>
-                  <ArrowRight size={16} className="shrink-0 text-[#94A3B8] group-hover:text-[#1E40AF] transition-colors" />
-                </div>
-              </button>
-            ))}
-          </div>
+                  </button>
+                ))}
+              </div>
 
-          {/* Citizen tracking link */}
-          <div className="mt-8 text-center">
-            <p className="text-xs text-[#64748B]">
-              Are you a citizen looking to track your request?{' '}
-              <a href="/track" className="font-medium text-[#1E40AF] hover:text-[#2563EB] transition-colors">
-                Track here
-              </a>
-            </p>
-          </div>
+              {/* Citizen tracking link */}
+              <div className="mt-8 text-center">
+                <p className="text-xs text-[#64748B]">
+                  Are you a citizen looking to track your request?{' '}
+                  <a href="/track" className="font-medium text-[#1E40AF] hover:text-[#2563EB] transition-colors">
+                    Track here
+                  </a>
+                </p>
+              </div>
+            </>
+          ) : (
+            <>
+              {/* Back button */}
+              <button
+                onClick={handleBack}
+                className="flex items-center gap-1.5 text-sm text-[#64748B] hover:text-[#0F172A] transition-colors mb-6"
+              >
+                <ArrowLeft size={16} />
+                Back to role selection
+              </button>
+
+              {/* Role badge */}
+              {selectedConfig && (
+                <div className="flex items-center gap-3 mb-6">
+                  <div className={cn('flex h-10 w-10 items-center justify-center rounded-lg text-white', selectedConfig.roleColor)}>
+                    {selectedConfig.icon}
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-[#0F172A]">Sign In</h2>
+                    <p className="text-xs text-[#64748B]">Logging in as {selectedConfig.label}</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Login form */}
+              <form onSubmit={handleLogin} className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-[#0F172A]">Email</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full rounded-lg border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] placeholder:text-[#94A3B8] focus:border-[#1E40AF] focus:outline-none focus:ring-2 focus:ring-[#1E40AF]/20"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-[#0F172A]">Password</label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full rounded-lg border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] placeholder:text-[#94A3B8] focus:border-[#1E40AF] focus:outline-none focus:ring-2 focus:ring-[#1E40AF]/20"
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className={cn(
+                    'w-full rounded-lg py-2.5 text-sm font-medium text-white transition-colors',
+                    selectedConfig?.roleColor || 'bg-[#1E40AF]',
+                    'hover:opacity-90 disabled:opacity-50',
+                  )}
+                >
+                  {isLoading ? 'Signing in...' : 'Sign In'}
+                </button>
+              </form>
+
+              {/* Demo credentials card */}
+              <div className="mt-6 rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Info size={14} className="text-[#64748B]" />
+                  <p className="text-xs font-medium text-[#64748B]">Demo Credentials</p>
+                </div>
+                <div className="space-y-1.5 text-xs text-[#94A3B8]">
+                  <p><span className="font-medium text-[#64748B]">Admin:</span> admin@ddma.gov.in</p>
+                  <p><span className="font-medium text-[#64748B]">POC:</span> sunita@cityhospital.org</p>
+                  <p><span className="font-medium text-[#64748B]">Owner:</span> amit@redcrossrelief.org</p>
+                  <p className="pt-1"><span className="font-medium text-[#64748B]">Password:</span> demo</p>
+                </div>
+                <p className="mt-3 text-[11px] text-[#D97706] bg-[#FEF3C7] rounded px-2 py-1">
+                  This is a demo application. No real authentication is used.
+                </p>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

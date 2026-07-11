@@ -49,9 +49,9 @@ npm run dev
 ```
 src/
 ├── types/              # TypeScript interfaces (Agency, Resource, Request, User)
-├── services/           # Service layer (mock → swap to real API here)
+├── services/           # Service layer with mock data implementations
 │   ├── mock/           # Mock data implementations
-│   └── index.ts        # Export point — swap mock for real API
+│   └── index.ts        # Export point
 ├── data/               # Static mock data
 ├── context/            # AuthContext (useAuth hook)
 ├── components/
@@ -86,13 +86,3 @@ src/
 | Manage Resources | `/owner/resources` | Resource Owner |
 | Incoming Requests | `/owner/requests` | Resource Owner |
 | Track Request | `/track` | Public (no login) |
-
-## Backend Integration
-
-The frontend uses a service layer abstraction. To integrate a real backend:
-
-1. Create API service files in `src/services/api/`
-2. Update `src/services/index.ts` to import real services instead of mock
-3. No changes needed in components, pages, or hooks
-
-See `BACKEND_STRUCTURE.md` and `API_ENDPOINTS.md` in the project root for backend architecture and API contracts.

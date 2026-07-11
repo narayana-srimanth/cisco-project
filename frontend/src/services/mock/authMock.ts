@@ -4,8 +4,6 @@ import { mockUsers } from '@/data/users';
 
 export const mockAuthService: AuthService = {
   async login(_email: string, _password: string): Promise<User> {
-    // In mock mode, return the first admin user for demo
-    // Real implementation will validate credentials against backend
     return mockUsers[0];
   },
 

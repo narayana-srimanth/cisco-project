@@ -1,6 +1,3 @@
-// Service layer — currently wired to mock implementations.
-// To integrate a backend, replace imports below with real API service files.
-
 import type { AuthService } from './authService';
 import type { AgencyService } from './agencyService';
 import type { ResourceService } from './resourceService';
