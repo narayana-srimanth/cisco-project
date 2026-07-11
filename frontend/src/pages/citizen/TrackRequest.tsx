@@ -104,7 +104,52 @@ export default function TrackRequest() {
       )}
 
       {!result && !notFound && !loading && (
-        <p className="mt-8 text-xs text-[#94A3B8]">Enter a tracking ID to see your request status</p>
+        <>
+          <p className="mt-8 text-xs text-[#94A3B8] mb-3">Enter a tracking ID to see your request status</p>
+
+          <div className="w-full max-w-md rounded-xl border border-[#E2E8F0] bg-white p-5 shadow-sm">
+            <p className="text-xs font-semibold text-[#0F172A] mb-3">Try these sample tracking IDs:</p>
+            <div className="space-y-2">
+              {[
+                { id: 'TRK-2026-001', name: 'Meena Kumari', desc: 'Oxygen supply', status: 'approved' },
+                { id: 'TRK-2026-002', name: 'Ravi Patil', desc: 'Food supplies', status: 'pending' },
+                { id: 'TRK-2026-003', name: 'Anjali Desai', desc: 'Temporary shelter', status: 'in_progress' },
+                { id: 'TRK-2026-004', name: 'Suresh Yadav', desc: 'Evacuation vehicle', status: 'pending' },
+                { id: 'TRK-2026-005', name: 'Farhan Shaikh', desc: 'Search & rescue volunteers', status: 'approved' },
+                { id: 'TRK-2026-006', name: 'Kavita Joshi', desc: 'Water supply', status: 'fulfilled' },
+                { id: 'TRK-2026-007', name: 'Nikhil Gupta', desc: 'Generators', status: 'declined' },
+                { id: 'TRK-2026-008', name: 'Priyanka Nair', desc: 'First aid kits', status: 'approved' },
+              ].map((item) => {
+                const s = statusConfig[item.status];
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      setTrackingId(item.id);
+                      setNotFound(false);
+                      setResult(null);
+                      setLoading(true);
+                      requestService.getByTrackingId(item.id).then((req) => {
+                        if (req) setResult(req);
+                        else setNotFound(true);
+                        setLoading(false);
+                      });
+                    }}
+                    className="w-full flex items-center justify-between rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2 text-left hover:border-[#1E40AF] hover:bg-[#EFF6FF] transition-colors cursor-pointer"
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-xs font-mono font-medium text-[#0F172A]">{item.id}</span>
+                      <span className="text-[11px] text-[#64748B]">{item.name} — {item.desc}</span>
+                    </div>
+                    <span className={cn('flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium', s.color)}>
+                      {s.icon} {s.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
